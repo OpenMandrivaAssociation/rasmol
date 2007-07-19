@@ -4,15 +4,15 @@
 
 # Basic macros
 %define name     rasmol
-%define version  2.7.2.1.1
-%define release  %mkrel 6
+%define version  2.7.3
+%define release  %mkrel 1
 %define abstract Molecular Graphics Visualization Tool
 
 Name:         %name
 Summary:      %abstract
 Version:      %version
 Release:      %release
-License:      Distributable
+License:      GPL
 Group:        Sciences/Chemistry
 URL:          http://www.bernstein-plus-sons.com/software/rasmol/
 Autoreqprov:  off
@@ -23,7 +23,10 @@ BuildRequires: X11-devel
 BuildRequires: imake
 BuildRequires: gccmakedep
 
-Source:       http://www.bernstein-plus-sons.com/software/rasmol/RasMol-%{version}.tar.bz2
+Source0:      http://www.bernstein-plus-sons.com/software/rasmol/RasMol_%{version}.tar.bz2
+Source1:      rasmol16.png
+Source2:      rasmol32.png
+Source3:      rasmol48.png
 
 %description
 RasMol is an X Window System tool intended for the visualization of
@@ -37,7 +40,12 @@ Authors:
 
 %prep
 
-%setup -n RasMol-%{version}
+%setup -n RasMol_%{version}
+rm -rf doc/RCS
+find ./ -name ".DS_Store" -exec rm -f {} \;
+chmod 644 NOTICE PROJECTS *.html *.shtml *.txt html_graphics/* data/* doc/*
+# This script is mac-specific, we don't need it
+rm -f data/RSML_fixup.csh
 
 %build
 cd src
@@ -50,18 +58,18 @@ mkdir -p %buildroot/%_bindir
 make -C src "DESTDIR=$RPM_BUILD_ROOT" install
 make -C src "DESTDIR=$RPM_BUILD_ROOT" install.man
 cp -a data %buildroot/usr/%{_lib}/rasmol
-ln -sf %_bindir/%name  %buildroot/%_bindir/%name
+cp src/%name  %buildroot/%_bindir/%name
 mkdir -p %buildroot%{_mandir}/man1/
-mv %buildroot/usr/man/man1/* %buildroot%{_mandir}/man1/
+#mv %buildroot/usr/share/man/man1/* %buildroot%{_mandir}/man1/
 # Menu icons
-install -D -m 644 Icons/%{name}48.png %buildroot/%_liconsdir/%name.png
-install -D -m 644 Icons/%{name}32.png %buildroot/%_iconsdir/%name.png
-install -D -m 644 Icons/%{name}16.png %buildroot/%_miconsdir/%name.png
+install -D -m 644 %{SOURCE1} %buildroot/%_miconsdir/%name.png
+install -D -m 644 %{SOURCE2} %buildroot/%_iconsdir/%name.png
+install -D -m 644 %{SOURCE3} %buildroot/%_liconsdir/%name.png
 
 # Menu entries
 mkdir -p %buildroot/%_menudir
 cat > %buildroot/%_menudir/%name << EOF
-?package(%name): command="/usr/X11R6/bin/rasmol" \
+?package(%name): command="%{_bindir}/%name" \
 needs="text" icon="%name.png" section="More applications/Sciences/Chemistry" \
 title="RasMol" longtitle="%abstract" \
 xdg="true"
@@ -72,7 +80,7 @@ cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=RasMol
 Comment=Molecular Graphics Visualization Tool
-Exec=%{_bindir}/%{name} 
+Exec=%{_bindir}/%{name}
 Icon=%{name}
 Terminal=false
 Type=Application
@@ -82,7 +90,7 @@ EOF
 
 %files
 %defattr(-,root,root)
-%doc NOTICE PROJECTS TODO* README* ChangeLog.html history.html index.shtml html_graphics
+%doc NOTICE PROJECTS TODO* README* RASLIC ChangeLog.* history.html index.shtml html_graphics
 %doc doc/*.gz doc/*.html doc/*.hlp
 %doc %{_mandir}/man1/*
 %{_libdir}/rasmol
