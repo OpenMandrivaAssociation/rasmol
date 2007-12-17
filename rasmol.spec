@@ -16,7 +16,6 @@ License:      GPL
 Group:        Sciences/Chemistry
 URL:          http://www.bernstein-plus-sons.com/software/rasmol/
 Autoreqprov:  off
-BuildRoot:    %{_tmppath}/%{name}-buildroot
 Provides:     RasMol
 
 BuildRequires: X11-devel
