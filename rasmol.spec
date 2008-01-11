@@ -67,13 +67,6 @@ install -D -m 644 %{SOURCE2} %buildroot/%_iconsdir/%name.png
 install -D -m 644 %{SOURCE3} %buildroot/%_liconsdir/%name.png
 
 # Menu entries
-mkdir -p %buildroot/%_menudir
-cat > %buildroot/%_menudir/%name << EOF
-?package(%name): command="%{_bindir}/%name" \
-needs="text" icon="%name.png" section="More applications/Sciences/Chemistry" \
-title="RasMol" longtitle="%abstract" \
-xdg="true"
-EOF
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
@@ -98,7 +91,6 @@ EOF
 %_liconsdir/*.png
 %_miconsdir/*.png
 %_iconsdir/*.png
-%_menudir/*
 %{_datadir}/applications/mandriva-%{name}.desktop
 
 %clean
