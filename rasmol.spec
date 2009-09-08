@@ -5,7 +5,7 @@
 # Basic macros
 %define name     rasmol
 %define version  2.7.3
-%define release  %mkrel 3
+%define release  %mkrel 4
 %define abstract Molecular Graphics Visualization Tool
 
 Name:         %name
