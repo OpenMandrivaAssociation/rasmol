@@ -4,15 +4,15 @@
 
 # Basic macros
 %define name     rasmol
-%define version  2.7.3
-%define release  %mkrel 4
+%define version  2.7.5
+%define release  %mkrel 1
 %define abstract Molecular Graphics Visualization Tool
 
 Name:         %name
 Summary:      %abstract
 Version:      %version
 Release:      %release
-License:      GPL
+License:      GPLv2
 Group:        Sciences/Chemistry
 URL:          http://www.bernstein-plus-sons.com/software/rasmol/
 Autoreqprov:  off
@@ -23,7 +23,7 @@ BuildRequires: X11-devel
 BuildRequires: imake
 BuildRequires: gccmakedep
 
-Source0:      http://www.bernstein-plus-sons.com/software/rasmol/RasMol_%{version}.tar.bz2
+Source0:      http://www.bernstein-plus-sons.com/software/rasmol/RasMol_%{version}.tar.gz
 Source1:      rasmol16.png
 Source2:      rasmol32.png
 Source3:      rasmol48.png
@@ -40,7 +40,7 @@ Authors:
 
 %prep
 
-%setup -n RasMol_%{version}
+%setup -n rasmol-%{version}-23Jul09
 rm -rf doc/RCS
 find ./ -name ".DS_Store" -exec rm -f {} \;
 chmod 644 NOTICE PROJECTS *.html *.shtml *.txt html_graphics/* data/* doc/*
@@ -53,23 +53,23 @@ xmkmf -a
 %make
 
 %install
-rm -rf %buildroot
-mkdir -p %buildroot/%_bindir
-make -C src "DESTDIR=$RPM_BUILD_ROOT" install
-make -C src "DESTDIR=$RPM_BUILD_ROOT" install.man
-cp -a data %buildroot/usr/%{_lib}/rasmol
-cp src/%name  %buildroot/%_bindir/%name
-mkdir -p %buildroot%{_mandir}/man1/
-#mv %buildroot/usr/share/man/man1/* %buildroot%{_mandir}/man1/
+rm -rf %{buildroot}
+mkdir -p %{buildroot}/%{_bindir}
+make -C src "DESTDIR=%{buildroot}" install
+make -C src "DESTDIR=%{buildroot}" install.man
+cp -a data %{buildroot}/usr/%{_lib}/rasmol
+cp src/%{name}  %{buildroot}/%{_bindir}/%{name}
+mkdir -p %{buildroot}%{_mandir}/man1/
+#mv %{buildroot}/usr/share/man/man1/* %{buildroot}%{_mandir}/man1/
 # Menu icons
-install -D -m 644 %{SOURCE1} %buildroot/%_miconsdir/%name.png
-install -D -m 644 %{SOURCE2} %buildroot/%_iconsdir/%name.png
-install -D -m 644 %{SOURCE3} %buildroot/%_liconsdir/%name.png
+install -D -m 644 %{SOURCE1} %{buildroot}/%{_miconsdir}/%{name}.png
+install -D -m 644 %{SOURCE2} %{buildroot}/%{_iconsdir}/%{name}.png
+install -D -m 644 %{SOURCE3} %{buildroot}/%{_liconsdir}/%{name}.png
 
 # Menu entries
 
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
-cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
+mkdir -p %{buildroot}%{_datadir}/applications
+cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=RasMol
 Comment=Molecular Graphics Visualization Tool
@@ -83,18 +83,18 @@ EOF
 
 %files
 %defattr(-,root,root)
-%doc NOTICE PROJECTS TODO* README* RASLIC ChangeLog.* history.html index.shtml html_graphics
+%doc NOTICE PROJECTS TODO* README* RASLIC ChangeLog.* history.html html_graphics
 %doc doc/*.gz doc/*.html doc/*.hlp
 %doc %{_mandir}/man1/*
 %{_libdir}/rasmol
-%_bindir/*
-%_liconsdir/*.png
-%_miconsdir/*.png
-%_iconsdir/*.png
+%{_bindir}/*
+%{_liconsdir}/*.png
+%{_miconsdir}/*.png
+%{_iconsdir}/*.png
 %{_datadir}/applications/mandriva-%{name}.desktop
 
 %clean
-rm -rf %buildroot
+rm -rf %{buildroot}
 
 %if %mdkversion < 200900
 %post
