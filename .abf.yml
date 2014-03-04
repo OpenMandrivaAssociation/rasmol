@@ -1,2 +1,6 @@
 sources:
-  "RasMol_2.7.3.tar.bz2": 0ebbb4a5cca177356bf412c1e47ac9d0d95d1ea7
+  RasMol_2.7.3.tar.bz2: 0ebbb4a5cca177356bf412c1e47ac9d0d95d1ea7
+  RasMol_Latest.tar.gz: 3e2fe37a003a1d9f6a866e9a17cd0bf596c5f349
+  rasmol16.png: e26df7ecad6eb2bf6b599ca1a2c849af4776e7d9
+  rasmol32.png: 8a4b2fe3c650924308cb39522c1d8a3ca59cc401
+  rasmol48.png: 65113d4817a7f6a4996d2c4aa1dcc55847bfddf8
