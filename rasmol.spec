@@ -4,7 +4,7 @@ Version:      2.7.5.2
 Release:      2
 License:      GPL
 Group:        Sciences/Chemistry
-URL:          http://www.bernstein-plus-sons.com/software/rasmol/
+URL:          https://www.bernstein-plus-sons.com/software/rasmol/
 Autoreqprov:  off
 Provides:     RasMol
 
